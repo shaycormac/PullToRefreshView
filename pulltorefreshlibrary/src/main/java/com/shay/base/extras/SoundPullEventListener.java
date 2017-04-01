@@ -17,37 +17,40 @@ package com.shay.base.extras;
 
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.support.v4.util.SparseArrayCompat;
 import android.view.View;
 
 import com.shay.base.PullToRefreshBase;
-
-import java.util.HashMap;
 
 public class SoundPullEventListener<V extends View> implements
 		PullToRefreshBase.OnPullEventListener<V> {
 
 	private final Context mContext;
-	private final HashMap<PullToRefreshBase.State, Integer> mSoundMap;
+
+	private SparseArrayCompat<PullToRefreshBase.State> mSoundMap;
 
 	private MediaPlayer mCurrentMediaPlayer;
 
 	/**
 	 * Constructor
-	 * 
-	 * @param context
-	 *            - Context
+	 *
+	 * @param context - Context
 	 */
 	public SoundPullEventListener(Context context) {
 		mContext = context;
-		mSoundMap = new HashMap<PullToRefreshBase.State, Integer>();
+		mSoundMap = new SparseArrayCompat<>();
 	}
 
 	@Override
 	public final void onPullEvent(PullToRefreshBase<V> refreshView, PullToRefreshBase.State event, PullToRefreshBase.Mode direction) {
-		Integer soundResIdObj = mSoundMap.get(event);
-		if (null != soundResIdObj) {
-			playSound(soundResIdObj.intValue());
+		int index = mSoundMap.indexOfValue(event);
+		if (index!=-1)
+		{
+
+			int  resId = mSoundMap.keyAt(index);
+			playSound(resId);
 		}
+
 	}
 
 	/**
@@ -55,14 +58,12 @@ public class SoundPullEventListener<V extends View> implements
 	 * which events by calling this method multiple times for each event.
 	 * If you've already set a sound for a certain event, and add another sound for that event,
 	 * only the new sound will be played.
-	 * 
-	 * @param event
-	 *            - The event for which the sound will be played.
-	 * @param resId
-	 *            - Resource Id of the sound file to be played (e.g. <var>R.raw.pull_sound</var>)
+	 *
+	 * @param event - The event for which the sound will be played.
+	 * @param resId - Resource Id of the sound file to be played (e.g. <var>R.raw.pull_sound</var>)
 	 */
 	public void addSoundEvent(PullToRefreshBase.State event, int resId) {
-		mSoundMap.put(event, resId);
+		mSoundMap.put(resId,event);
 	}
 
 	/**
