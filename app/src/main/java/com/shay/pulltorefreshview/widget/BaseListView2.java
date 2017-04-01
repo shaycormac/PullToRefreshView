@@ -18,18 +18,21 @@ import com.shay.base.PullToRefreshListView;
 import com.shay.base.extras.SoundPullEventListener;
 import com.shay.pulltorefreshview.R;
 import com.shay.pulltorefreshview.net.CallBack;
+import com.shay.pulltorefreshview.widget.adapter.ItemViewDelegate;
+import com.shay.pulltorefreshview.widget.adapter.MultiItemTypeAdapter;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 作者：Shay-Patrick-Cormac
- * @datetime 创建时间：2017-03-31 14:15 GMT+8
+ * @datetime 创建时间：2017-04-01 14:50 GMT+8
  * @email 邮箱： 574583006@qq.com
- * @content 说明：创建这个类的目的，意义。
+ * @content 说明：多类型item的listView。
  */
-public abstract class BaseListView<E> 
+public abstract class BaseListView2<E> 
 {
     public PullToRefreshListView ptrListView;
     public final ArrayList<E> mListItems = new ArrayList<>();
@@ -40,7 +43,7 @@ public abstract class BaseListView<E>
     protected int page = 1;
     protected int mPerPage = 10;
     //几个状态
-    @ActionType
+    @ActionType2
     public int actionType = IDLE;
     public static final int IDLE = 0;
     public static final int INIT = 1;
@@ -49,7 +52,7 @@ public abstract class BaseListView<E>
 
     @IntDef({IDLE, INIT, REFRESH, GETMORE})
     @Retention(RetentionPolicy.SOURCE)
-    public @interface ActionType {
+    public @interface ActionType2 {
     }
 
     private View view = null;
@@ -65,32 +68,26 @@ public abstract class BaseListView<E>
      */
     private LayoutInflater layoutInflater;
 
-    //三个抽象方法等待具体子类实现
-
-    /**
-     * 具体的每一个Item
-     *
-     * @param layoutInflater
-     * @param convertView
-     * @param e
-     * @return
-     */
-    public abstract View newItemView(LayoutInflater layoutInflater, View convertView, E e);
-
+    //两个抽象方法等待具体子类实现
+    
     /**
      * 网络请求后返回的数据
      *
      * @param response
      * @param actionType
      */
-    public abstract void handleResponse(String response, @ActionType int actionType);
+    public abstract void handleResponse(String response, @ActionType2 int actionType);
 
     /**
      * 具体的网络请求
      */
     public abstract void asyncData();
-    //具体的几个手势状态
 
+    /**
+     * 多种类型的itemType，必须返回一个相应的类型集合。
+     */
+    public abstract List<ItemViewDelegate<E>> getItemViewDelegates();
+    //具体的几个手势状态
     /**
      * 初始化，每一个继承该类的方法构造函数中必须调用这个方法
      */
@@ -118,7 +115,7 @@ public abstract class BaseListView<E>
         asyncData();
     }
 
-    public BaseListView(PullToRefreshListView ptrListView, Context mContext) {
+    public BaseListView2(PullToRefreshListView ptrListView, Context mContext) {
         this.ptrListView = ptrListView;
         this.mContext = mContext;
         layoutInflater = LayoutInflater.from(mContext);
@@ -126,7 +123,7 @@ public abstract class BaseListView<E>
     }
 
 
-    public BaseListView(PullToRefreshListView ptrListView, Context mContext, View headerView) {
+    public BaseListView2(PullToRefreshListView ptrListView, Context mContext, View headerView) {
         this.ptrListView = ptrListView;
         this.mContext = mContext;
         this.headerView = headerView;
@@ -140,7 +137,8 @@ public abstract class BaseListView<E>
     private void ensureUi() {
         if (null != headerView)
             ptrListView.getRefreshableView().addHeaderView(headerView);
-        adapter = new ListAdapter(layoutInflater);
+       // adapter = new ListAdapter(layoutInflater);
+        adapter = new MuiltAdapter(mContext, mListItems);
         //todo 设置没有数据的监听
         view = LayoutInflater.from(mContext).inflate(R.layout.list_no_data_cache, null);
         rlNoCache = (LinearLayout) view.findViewById(R.id.rlNoCache);
@@ -197,12 +195,12 @@ public abstract class BaseListView<E>
                 getMoreListViewStart();
             }
         });
-       //播放音效
+        //播放音效
         SoundPullEventListener<ListView> soundListener = new SoundPullEventListener<ListView>(mContext);
         soundListener.addSoundEvent(PullToRefreshBase.State.PULL_TO_REFRESH, R.raw.pull_event);
         soundListener.addSoundEvent(PullToRefreshBase.State.RESET, R.raw.reset_sound);
         soundListener.addSoundEvent(PullToRefreshBase.State.REFRESHING, R.raw.refreshing_sound);
-       ptrListView.setOnPullEventListener(soundListener);
+        ptrListView.setOnPullEventListener(soundListener);
         //是否显示EmptyView
         if (ptrListView.getMode() == PullToRefreshBase.Mode.BOTH || ptrListView.getMode() == PullToRefreshBase.Mode.PULL_FROM_START) {
             if (ptrListView.getRefreshableView().getHeaderViewsCount() <= 1) {
@@ -222,33 +220,24 @@ public abstract class BaseListView<E>
 
 
     }
+    
+    //继承的adapter
+    class MuiltAdapter extends MultiItemTypeAdapter<E>
+    {
+        List<ItemViewDelegate<E>> itemViewDelegates;
 
-    //自定义Adapter
-    class ListAdapter extends BaseAdapter {
-        private LayoutInflater layoutInflater;
-
-        public ListAdapter(LayoutInflater layoutInflater) {
-            this.layoutInflater = layoutInflater;
-        }
-
-        @Override
-        public int getCount() {
-            return mListItems.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mListItems.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            return newItemView(layoutInflater, convertView, mListItems.get(position));
+        public MuiltAdapter(Context context, List<E> mDatas) 
+        {
+            super(context, mDatas,layoutInflater);
+            //添加不同种的类型
+            itemViewDelegates = getItemViewDelegates();
+            if (itemViewDelegates==null || itemViewDelegates.isEmpty())
+                throw new IllegalArgumentException("至少添加一种item类型");
+            int size = itemViewDelegates.size();
+            for (int i = 0; i < size; i++) 
+            {
+                addItemViewDelegate(itemViewDelegates.get(i));   
+            }
         }
     }
 
@@ -284,15 +273,15 @@ public abstract class BaseListView<E>
                 else
                     rlNoData.setVisibility(View.VISIBLE);
             }
-            
+
             switch(actionType)
             {
-              case INIT:
-                  break;
-              case REFRESH :
+                case INIT:
+                    break;
+                case REFRESH :
                 case GETMORE:
-                    ptrListView.onRefreshComplete(); 
-                  break;
+                    ptrListView.onRefreshComplete();
+                    break;
             }
             //恢复到原始状态
             actionType = IDLE;
@@ -325,11 +314,10 @@ public abstract class BaseListView<E>
             }
             ptrListView.getRefreshableView().addFooterView(view);
             ptrListView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
-            
-        }else 
-            ptrListView.setMode(PullToRefreshBase.Mode.BOTH);
-        
-    }
 
+        }else
+            ptrListView.setMode(PullToRefreshBase.Mode.BOTH);
+
+    }
 
 }
