@@ -52,7 +52,6 @@ public interface IPullToRefresh<T extends View> {
 	/**
 	 * Returns a proxy object which allows you to call methods on all of the LoadingLayouts (the
 	 * Views which show when Pulling/Refreshing).
-	 * <p />
 	 * You should not keep the result of this method any longer than you need it.
 	 * 
 	 * @return Object which will proxy any calls you make on it, to all of the LoadingLayouts.
@@ -63,7 +62,6 @@ public interface IPullToRefresh<T extends View> {
 	 * Returns a proxy object which allows you to call methods on the LoadingLayouts (the Views
 	 * which show when Pulling/Refreshing). The actual LoadingLayout(s) which will be affected, are
 	 * chosen by the parameters you give.
-	 * <p />
 	 * You should not keep the result of this method any longer than you need it.
 	 * 
 	 * @param includeStart
