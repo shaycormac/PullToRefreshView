@@ -38,8 +38,8 @@ public class PullToRefreshScrollView extends PullToRefreshBase<ScrollView> {
 		super(context, mode);
 	}
 
-	public PullToRefreshScrollView(Context context, Mode mode, AnimationStyle style) {
-		super(context, mode, style);
+	public PullToRefreshScrollView(Context context, Mode mode, @AnimationStyle int animaType) {
+		super(context, mode, animaType);
 	}
 
 	@Override

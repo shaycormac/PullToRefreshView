@@ -77,8 +77,8 @@ public class PullToRefreshWebView extends PullToRefreshBase<WebView> {
 		mRefreshableView.setWebChromeClient(defaultWebChromeClient);
 	}
 
-	public PullToRefreshWebView(Context context, Mode mode, AnimationStyle style) {
-		super(context, mode, style);
+	public PullToRefreshWebView(Context context, Mode mode, @AnimationStyle int animaType) {
+		super(context, mode, animaType);
 
 		/**
 		 * Added so that by default, Pull-to-Refresh refreshes the page

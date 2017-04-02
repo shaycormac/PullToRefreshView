@@ -37,7 +37,7 @@ publish {
     userOrg = 'shay'//bintray.com
     groupId = 'com.shay'//jcenter
     artifactId = 'pulltorefresh'//
-    publishVersion = '0.0.1'//
+    publishVersion = '0.0.2'//
     desc = 'a library for pullToRefreshListView and so on'//
     website = 'https://github.com/shaycormac/PullToRefreshView'//
 }

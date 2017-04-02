@@ -17,6 +17,6 @@ public class RankListActivity extends AppCompatActivity {
         ptrListView = (PullToRefreshListView) findViewById(R.id.ptrListView);
         //new RankList(ptrListView, this);
         View headView = LayoutInflater.from(this).inflate(R.layout.muilt_headview_layout, null);
-        new MuiltTypeList(ptrListView, this);
+        new MuiltTypeList(ptrListView, this,headView);
     }
 }

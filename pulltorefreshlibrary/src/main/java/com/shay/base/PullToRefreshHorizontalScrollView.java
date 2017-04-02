@@ -38,8 +38,8 @@ public class PullToRefreshHorizontalScrollView extends PullToRefreshBase<Horizon
 		super(context, mode);
 	}
 
-	public PullToRefreshHorizontalScrollView(Context context, Mode mode, AnimationStyle style) {
-		super(context, mode, style);
+	public PullToRefreshHorizontalScrollView(Context context, Mode mode, @AnimationStyle int animaType) {
+		super(context, mode, animaType);
 	}
 
 	@Override

@@ -92,7 +92,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
     private boolean mLayoutVisibilityChangesEnabled = true;
 
     private Interpolator mScrollAnimationInterpolator;
-    private AnimationStyle mLoadingAnimationStyle = AnimationStyle.getDefault();
+    //private AnimationStyle mLoadingAnimationStyle = AnimationStyle.getDefault();
 
     private LoadingLayout mHeaderLayout;
     private LoadingLayout mFooterLayout;
@@ -123,10 +123,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         init(context, null);
     }
 
-    public PullToRefreshBase(Context context, Mode mode, AnimationStyle animStyle) {
+    public PullToRefreshBase(Context context, Mode mode, @AnimationStyle int animationType) 
+    {
         super(context);
         mMode = mode;
-        mLoadingAnimationStyle = animStyle;
+        this.animationType = animationType;
+      //  mLoadingAnimationStyle = animStyle;
         init(context, null);
     }
 
@@ -604,9 +606,13 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         super.addView(child, -1, params);
     }
 
-    protected LoadingLayout createLoadingLayout(Context context, Mode mode, TypedArray attrs) {
-        LoadingLayout layout = mLoadingAnimationStyle.createLoadingLayout(context, mode,
-                getPullToRefreshScrollDirection(), attrs);
+    protected LoadingLayout createLoadingLayout(Context context, Mode mode, TypedArray attrs) 
+    {
+        LoadingLayout layout;
+        if (animationType ==ROTATE)
+            layout = new RotateLoadingLayout(context, mode, getPullToRefreshScrollDirection(), attrs);
+        else
+            layout = new FlipLoadingLayout(context, mode, getPullToRefreshScrollDirection(), attrs);
         layout.setVisibility(View.INVISIBLE);
         return layout;
     }
@@ -1072,9 +1078,10 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
             mMode = Mode.mapIntToValue(a.getInteger(R.styleable.PullToRefreshBase_ptrMode, 0));
         }
 
-        if (a.hasValue(R.styleable.PullToRefreshBase_ptrAnimationStyle)) {
-            mLoadingAnimationStyle = AnimationStyle.mapIntToValue(a.getInteger(
-                    R.styleable.PullToRefreshBase_ptrAnimationStyle, 0));
+        if (a.hasValue(R.styleable.PullToRefreshBase_ptrAnimationStyle)) 
+        {
+           // mLoadingAnimationStyle = AnimationStyle.mapIntToValue(a.getInteger(R.styleable.PullToRefreshBase_ptrAnimationStyle, 0));
+            animationType = a.getInt(R.styleable.PullToRefreshBase_ptrAnimationStyle, 0);
         }
 
         // Refreshable View
@@ -1268,52 +1275,16 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         });
     }
 
-    public static enum AnimationStyle {
-        /**
-         * This is the default for Android-PullToRefresh. Allows you to use any drawable, which is
-         * automatically rotated and used as a Progress Bar.
-         */
-        ROTATE,
-
-        /**
-         * This is the old default, and what is commonly used on iOS. Uses an arrow image which
-         * flips depending on where the user has scrolled.
-         */
-        FLIP;
-
-        static AnimationStyle getDefault() {
-            return ROTATE;
-        }
-
-        /**
-         * Maps an int to a specific mode. This is needed when saving state, or inflating the view
-         * from XML where the mode is given through a attr int.
-         *
-         * @param modeInt - int to map a Mode to
-         * @return Mode that modeInt maps to, or ROTATE by default.
-         */
-        static AnimationStyle mapIntToValue(int modeInt) {
-            switch (modeInt) {
-                case 0x0:
-                default:
-                    return ROTATE;
-                case 0x1:
-                    return FLIP;
-            }
-        }
-
-        LoadingLayout createLoadingLayout(Context context, Mode mode, @Orientation int scrollDirection,
-                                          TypedArray attrs) {
-            switch (this) {
-                case ROTATE:
-                default:
-                    return new RotateLoadingLayout(context, mode, scrollDirection, attrs);
-                case FLIP:
-                    return new FlipLoadingLayout(context, mode, scrollDirection, attrs);
-            }
-        }
+    public static final int ROTATE = 0x00000000;
+    public static final int FLIP = 0x00000001;
+    @AnimationStyle
+    public int animationType = ROTATE;
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({ROTATE,FLIP})
+    public @interface AnimationStyle
+    {
     }
-
+    
     public static enum Mode {
 
         /**

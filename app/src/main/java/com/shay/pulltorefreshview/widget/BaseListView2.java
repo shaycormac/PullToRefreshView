@@ -267,7 +267,7 @@ public abstract class BaseListView2<E>
                     adapter.notifyDataSetChanged();
             }
 /*设置无数据提示图片是否显示*/
-            if (rlNoCache != null) {
+            if ( rlNoData != null) {
                 if (mListItems.size() > 0)
                     rlNoData.setVisibility(View.GONE);
                 else
@@ -312,6 +312,7 @@ public abstract class BaseListView2<E>
                 if (rlNoCache!=null)
                     rlNoCache.setClickable(false);
             }
+            if (headerView==null)
             ptrListView.getRefreshableView().addFooterView(view);
             ptrListView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
 
