@@ -197,9 +197,9 @@ public abstract class BaseListView2<E>
         });
         //播放音效
         SoundPullEventListener<ListView> soundListener = new SoundPullEventListener<ListView>(mContext);
-        soundListener.addSoundEvent(PullToRefreshBase.State.PULL_TO_REFRESH, R.raw.pull_event);
-        soundListener.addSoundEvent(PullToRefreshBase.State.RESET, R.raw.reset_sound);
-        soundListener.addSoundEvent(PullToRefreshBase.State.REFRESHING, R.raw.refreshing_sound);
+        soundListener.addSoundEvent(PullToRefreshBase.PULL_TO_REFRESH, R.raw.pull_event);
+        soundListener.addSoundEvent(PullToRefreshBase.RESET, R.raw.reset_sound);
+        soundListener.addSoundEvent(PullToRefreshBase.REFRESHING, R.raw.refreshing_sound);
         ptrListView.setOnPullEventListener(soundListener);
         //是否显示EmptyView
         if (ptrListView.getMode() == PullToRefreshBase.Mode.BOTH || ptrListView.getMode() == PullToRefreshBase.Mode.PULL_FROM_START) {
@@ -312,7 +312,8 @@ public abstract class BaseListView2<E>
                 if (rlNoCache!=null)
                     rlNoCache.setClickable(false);
             }
-            if (headerView==null)
+            //只有上拉更多的时候才显示没有了
+           // if (actionType==GETMORE)
             ptrListView.getRefreshableView().addFooterView(view);
             ptrListView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
 

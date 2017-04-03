@@ -78,7 +78,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
     private float mInitialMotionX, mInitialMotionY;
 
     private boolean mIsBeingDragged = false;
-    private State mState = State.RESET;
+    //private State mState = State.RESET;
     private Mode mMode = Mode.getDefault();
 
     private Mode mCurrentMode;
@@ -197,8 +197,10 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
     }
 
     @Override
-    public final State getState() {
-        return mState;
+    public final @State
+    int getState() 
+    {
+        return stateType;
     }
 
     /**
@@ -221,8 +223,10 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
     }
 
     @Override
-    public final boolean isRefreshing() {
-        return mState == State.REFRESHING || mState == State.MANUAL_REFRESHING;
+    public final boolean isRefreshing() 
+    {
+        return stateType == REFRESHING || stateType == MANUAL_REFRESHING;
+       // return mState == State.REFRESHING || mState == State.MANUAL_REFRESHING;
     }
 
     @Override
@@ -312,7 +316,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
     @Override
     public final void onRefreshComplete() {
         if (isRefreshing()) {
-            setState(State.RESET);
+            setState(RESET);
         }
     }
 
@@ -357,15 +361,16 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
                 if (mIsBeingDragged) {
                     mIsBeingDragged = false;
 
-                    if (mState == State.RELEASE_TO_REFRESH) {
+                    if (stateType==RELEASE_TO_REFRESH) 
+                    {
 
                         if (null != mOnRefreshListener) {
-                            setState(State.REFRESHING, true);
+                            setState(REFRESHING, true);
                             mOnRefreshListener.onRefresh(this);
                             return true;
 
                         } else if (null != mOnRefreshListener2) {
-                            setState(State.REFRESHING, true);
+                            setState(REFRESHING, true);
                             if (mCurrentMode == Mode.PULL_FROM_START) {
                                 mOnRefreshListener2.onPullDownToRefresh(this);
                             } else if (mCurrentMode == Mode.PULL_FROM_END) {
@@ -383,7 +388,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
                     // If we haven't returned by here, then we're not in a state
                     // to pull, so just reset
-                    setState(State.RESET);
+                    setState(RESET);
 
                     return true;
                 }
@@ -505,7 +510,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
     @Override
     public final void setRefreshing(boolean doScroll) {
         if (!isRefreshing()) {
-            setState(State.MANUAL_REFRESHING, doScroll);
+            setState(MANUAL_REFRESHING, doScroll);
         }
     }
 
@@ -559,13 +564,14 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
     public abstract @Orientation int getPullToRefreshScrollDirection();
 
-    final void setState(State state, final boolean... params) {
-        mState = state;
+    final void setState(@State int stateType, final boolean... params) {
+        this.stateType = stateType;
         if (DEBUG) {
-            Log.d(LOG_TAG, "State: " + mState.name());
+            Log.d(LOG_TAG, "State: " + stateType);
         }
 
-        switch (mState) {
+        switch (stateType) 
+        {
             case RESET:
                 onReset();
                 break;
@@ -585,8 +591,9 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         }
 
         // Call OnPullEventListener
-        if (null != mOnPullEventListener) {
-            mOnPullEventListener.onPullEvent(this, mState, mCurrentMode);
+        if (null != mOnPullEventListener) 
+        {
+            mOnPullEventListener.onPullEvent(this, stateType, mCurrentMode);
         }
     }
 
@@ -819,11 +826,10 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
 
             // Let super Restore Itself
             super.onRestoreInstanceState(bundle.getParcelable(STATE_SUPER));
-
-            State viewState = State.mapIntToValue(bundle.getInt(STATE_STATE, 0));
-            if (viewState == State.REFRESHING || viewState == State.MANUAL_REFRESHING) {
-                setState(viewState, true);
-            }
+            int stateType = bundle.getInt(STATE_STATE, RESET);
+            if (stateType==REFRESHING||stateType==MANUAL_REFRESHING)
+                setState(stateType,true);
+           
 
             // Now let derivative classes restore their state
             onPtrRestoreInstanceState(bundle);
@@ -841,7 +847,7 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
         // can make sure they don't overrite any of our values
         onPtrSaveInstanceState(bundle);
 
-        bundle.putInt(STATE_STATE, mState.getIntValue());
+        bundle.putInt(STATE_STATE, stateType);
         bundle.putInt(STATE_MODE, mMode.getIntValue());
         bundle.putInt(STATE_CURRENT_MODE, mCurrentMode.getIntValue());
         bundle.putBoolean(STATE_SCROLLING_REFRESHING_ENABLED, mScrollingWhileRefreshingEnabled);
@@ -1192,10 +1198,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
                     break;
             }
 
-            if (mState != State.PULL_TO_REFRESH && itemDimension >= Math.abs(newScrollValue)) {
-                setState(State.PULL_TO_REFRESH);
-            } else if (mState == State.PULL_TO_REFRESH && itemDimension < Math.abs(newScrollValue)) {
-                setState(State.RELEASE_TO_REFRESH);
+            if (stateType!= PULL_TO_REFRESH && itemDimension >= Math.abs(newScrollValue)) 
+            {
+                setState(PULL_TO_REFRESH);
+            } else if (stateType == PULL_TO_REFRESH && itemDimension < Math.abs(newScrollValue)) 
+            {
+                setState(RELEASE_TO_REFRESH);
             }
         }
     }
@@ -1413,12 +1421,12 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
          * Called when the internal state has been changed, usually by the user pulling.
          *
          * @param refreshView - View which has had it's state change.
-         * @param state       - The new state of View.
+         * @param stateType       - The new state of View.
          * @param direction   - One of {@link Mode#PULL_FROM_START} or {@link Mode#PULL_FROM_END} depending
          *                    on which direction the user is pulling. Only useful when <var>state</var> is
          *                    {@link State#PULL_TO_REFRESH} or {@link State#RELEASE_TO_REFRESH}.
          */
-        public void onPullEvent(final PullToRefreshBase<V> refreshView, State state, Mode direction);
+         void onPullEvent(final PullToRefreshBase<V> refreshView, @State int stateType, Mode direction);
 
     }
 
@@ -1474,71 +1482,43 @@ public abstract class PullToRefreshBase<T extends View> extends LinearLayout imp
     public @interface Orientation {
 
     }
+    @State
+    public int stateType=RESET;
+    /**
+     * When the UI is in a state which means that user is not interacting with the
+     * Pull-to-Refresh function.
+     */
+    public static final int RESET = 0x0;
+    /**
+     * When the UI is being pulled by the user, but has not been pulled far enough so that it
+     * refreshes when released.
+     */
+    public static final int PULL_TO_REFRESH = 0x1;
+    /**
+     * When the UI is being pulled by the user, and <strong>has</strong> been pulled far enough
+     * so that it will refresh when released.
+     */
+    public static final int RELEASE_TO_REFRESH = 0x2;
+    /**
+     * When the UI is currently refreshing, caused by a pull gesture.
+     */
+    public static final int REFRESHING = 0x8;
+    /**
+     * When the UI is currently refreshing, caused by a call to
+     * {@link PullToRefreshBase#setRefreshing() setRefreshing()}.
+     */
+    public static final int MANUAL_REFRESHING = 0x9;
+    /**
+     * When the UI is currently overscrolling, caused by a fling on the Refreshable View.
+     */
+    public static final int OVERSCROLLING = 0x10;
 
-    public static enum State {
+    @Retention(RetentionPolicy.SOURCE)
+    @IntDef({RESET,PULL_TO_REFRESH,RELEASE_TO_REFRESH,REFRESHING,MANUAL_REFRESHING,OVERSCROLLING})
+    public @interface State {
 
-        /**
-         * When the UI is in a state which means that user is not interacting with the
-         * Pull-to-Refresh function.
-         */
-        RESET(0x0),
-
-        /**
-         * When the UI is being pulled by the user, but has not been pulled far enough so that it
-         * refreshes when released.
-         */
-        PULL_TO_REFRESH(0x1),
-
-        /**
-         * When the UI is being pulled by the user, and <strong>has</strong> been pulled far enough
-         * so that it will refresh when released.
-         */
-        RELEASE_TO_REFRESH(0x2),
-
-        /**
-         * When the UI is currently refreshing, caused by a pull gesture.
-         */
-        REFRESHING(0x8),
-
-        /**
-         * When the UI is currently refreshing, caused by a call to
-         * {@link PullToRefreshBase#setRefreshing() setRefreshing()}.
-         */
-        MANUAL_REFRESHING(0x9),
-
-        /**
-         * When the UI is currently overscrolling, caused by a fling on the Refreshable View.
-         */
-        OVERSCROLLING(0x10);
-
-        /**
-         * Maps an int to a specific state. This is needed when saving state.
-         *
-         * @param stateInt - int to map a State to
-         * @return State that stateInt maps to
-         */
-        static State mapIntToValue(final int stateInt) {
-            for (State value : State.values()) {
-                if (stateInt == value.getIntValue()) {
-                    return value;
-                }
-            }
-
-            // If not, return default
-            return RESET;
-        }
-
-        private int mIntValue;
-
-        State(int intValue) {
-            mIntValue = intValue;
-        }
-
-        int getIntValue() {
-            return mIntValue;
-        }
     }
-
+    
     final class SmoothScrollRunnable implements Runnable {
         private final Interpolator mInterpolator;
         private final int mScrollToY;

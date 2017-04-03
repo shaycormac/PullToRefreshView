@@ -17,7 +17,7 @@ package com.shay.base.extras;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.support.v4.util.SparseArrayCompat;
+import android.util.SparseIntArray;
 import android.view.View;
 
 import com.shay.base.PullToRefreshBase;
@@ -27,7 +27,8 @@ public class SoundPullEventListener<V extends View> implements
 
 	private final Context mContext;
 
-	private SparseArrayCompat<PullToRefreshBase.State> mSoundMap;
+	//private SparseArrayCompat<PullToRefreshBase.State> mSoundMap;
+	private SparseIntArray mSoundMap;
 
 	private MediaPlayer mCurrentMediaPlayer;
 
@@ -38,15 +39,14 @@ public class SoundPullEventListener<V extends View> implements
 	 */
 	public SoundPullEventListener(Context context) {
 		mContext = context;
-		mSoundMap = new SparseArrayCompat<>();
+		mSoundMap = new SparseIntArray();
 	}
 
 	@Override
-	public final void onPullEvent(PullToRefreshBase<V> refreshView, PullToRefreshBase.State event, PullToRefreshBase.Mode direction) {
+	public final void onPullEvent(PullToRefreshBase<V> refreshView, @PullToRefreshBase.State int event, PullToRefreshBase.Mode direction) {
 		int index = mSoundMap.indexOfValue(event);
 		if (index!=-1)
 		{
-
 			int  resId = mSoundMap.keyAt(index);
 			playSound(resId);
 		}
@@ -62,7 +62,7 @@ public class SoundPullEventListener<V extends View> implements
 	 * @param event - The event for which the sound will be played.
 	 * @param resId - Resource Id of the sound file to be played (e.g. <var>R.raw.pull_sound</var>)
 	 */
-	public void addSoundEvent(PullToRefreshBase.State event, int resId) {
+	public void addSoundEvent(@PullToRefreshBase.State int event, int resId) {
 		mSoundMap.put(resId,event);
 	}
 

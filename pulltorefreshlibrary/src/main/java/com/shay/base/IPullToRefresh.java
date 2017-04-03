@@ -99,7 +99,10 @@ public interface IPullToRefresh<T extends View> {
 	/**
 	 * @return - The state that the View is currently in.
 	 */
-	public PullToRefreshBase.State getState();
+	//public PullToRefreshBase.State getState();
+
+	public @PullToRefreshBase.State
+	int getState();
 
 	/**
 	 * Whether Pull-to-Refresh is enabled

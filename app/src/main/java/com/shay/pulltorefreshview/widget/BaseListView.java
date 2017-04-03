@@ -199,9 +199,9 @@ public abstract class BaseListView<E>
         });
        //播放音效
         SoundPullEventListener<ListView> soundListener = new SoundPullEventListener<ListView>(mContext);
-        soundListener.addSoundEvent(PullToRefreshBase.State.PULL_TO_REFRESH, R.raw.pull_event);
-        soundListener.addSoundEvent(PullToRefreshBase.State.RESET, R.raw.reset_sound);
-        soundListener.addSoundEvent(PullToRefreshBase.State.REFRESHING, R.raw.refreshing_sound);
+        soundListener.addSoundEvent(PullToRefreshBase.PULL_TO_REFRESH, R.raw.pull_event);
+        soundListener.addSoundEvent(PullToRefreshBase.RESET, R.raw.reset_sound);
+        soundListener.addSoundEvent(PullToRefreshBase.REFRESHING, R.raw.refreshing_sound);
        ptrListView.setOnPullEventListener(soundListener);
         //是否显示EmptyView
         if (ptrListView.getMode() == PullToRefreshBase.Mode.BOTH || ptrListView.getMode() == PullToRefreshBase.Mode.PULL_FROM_START) {

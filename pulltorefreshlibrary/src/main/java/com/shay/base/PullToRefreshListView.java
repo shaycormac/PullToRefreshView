@@ -175,7 +175,7 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 			 * Scroll so the View is at the same Y as the ListView header/footer, but only scroll
 			 * if: we've pulled to refresh, it's positioned correctly
 			 */
-			if (scrollLvToEdge && getState() != State.MANUAL_REFRESHING) {
+			if (scrollLvToEdge && getState() != MANUAL_REFRESHING) {
 				mRefreshableView.setSelection(selection);
 				setHeaderScroll(scrollToHeight);
 			}

@@ -154,7 +154,7 @@ public final class OverscrollHelper {
 						// If we're currently at zero, we're about to start
 						// overscrolling, so change the state
 						if (currentScrollValue == 0) {
-							view.setState(PullToRefreshBase.State.OVERSCROLLING);
+							view.setState(PullToRefreshBase.OVERSCROLLING);
 						}
 
 						view.setHeaderScroll((int) (scaleFactor * (currentScrollValue + newScrollValue)));
@@ -166,7 +166,7 @@ public final class OverscrollHelper {
 						// If we're currently at zero, we're about to start
 						// overscrolling, so change the state
 						if (currentScrollValue == 0) {
-							view.setState(PullToRefreshBase.State.OVERSCROLLING);
+							view.setState(PullToRefreshBase.OVERSCROLLING);
 						}
 
 						view.setHeaderScroll((int) (scaleFactor * (currentScrollValue
@@ -175,13 +175,13 @@ public final class OverscrollHelper {
 				} else if (Math.abs(newScrollValue) <= fuzzyThreshold
 						|| Math.abs(newScrollValue - scrollRange) <= fuzzyThreshold) {
 					// Means we've stopped overscrolling, so scroll back to 0
-					view.setState(PullToRefreshBase.State.RESET);
+					view.setState(PullToRefreshBase.RESET);
 				}
-			} else if (isTouchEvent && PullToRefreshBase.State.OVERSCROLLING == view.getState()) {
+			} else if (isTouchEvent && PullToRefreshBase.OVERSCROLLING == view.getState()) {
 				// This condition means that we were overscrolling from a fling,
 				// but the user has touched the View and is now overscrolling
 				// from touch instead. We need to just reset.
-				view.setState(PullToRefreshBase.State.RESET);
+				view.setState(PullToRefreshBase.RESET);
 			}
 		}
 	}
