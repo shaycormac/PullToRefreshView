@@ -17,5 +17,21 @@ public  class CallBack
      * @param isCache 数据是否从本地数据库获取
      * @param failureMessage 失败信息
      */
-    public  void onResponse(@NonNull String response, @NonNull boolean isCache, String failureMessage ) {};
+    public  void onResponse(@NonNull String response, @NonNull boolean isCache, String failureMessage ) {}
+
+    /**
+     * 成功获取服务器数据
+     * @param response 服务器返回数据
+     */
+    public void onSuccess(@NonNull String response) 
+    {
+    }
+
+    /**
+     * 获取服务器数据失败
+     * @param message 失败消息
+     */
+    public void onFailure(@NonNull String message) {
+    }
+
 }

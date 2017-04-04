@@ -37,11 +37,11 @@ public class PullToRefreshExpandableListView extends
 		super(context, attrs);
 	}
 
-	public PullToRefreshExpandableListView(Context context, Mode mode) {
+	public PullToRefreshExpandableListView(Context context, @Modes int mode) {
 		super(context, mode);
 	}
 
-	public PullToRefreshExpandableListView(Context context, Mode mode, @AnimationStyle int animaType) {
+	public PullToRefreshExpandableListView(Context context, @Modes int mode, @AnimationStyle int animaType) {
 		super(context, mode, animaType);
 	}
 

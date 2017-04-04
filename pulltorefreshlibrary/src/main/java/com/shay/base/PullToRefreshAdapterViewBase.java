@@ -76,13 +76,13 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 		mRefreshableView.setOnScrollListener(this);
 	}
 
-	public PullToRefreshAdapterViewBase(Context context, Mode mode) {
-		super(context, mode);
+	public PullToRefreshAdapterViewBase(Context context, @Modes int modeType) {
+		super(context, modeType);
 		mRefreshableView.setOnScrollListener(this);
 	}
 
-	public PullToRefreshAdapterViewBase(Context context, Mode mode, @AnimationStyle int animaType) {
-		super(context, mode, animaType);
+	public PullToRefreshAdapterViewBase(Context context, @Modes  int modeType, @AnimationStyle int animaType) {
+		super(context, modeType, animaType);
 		mRefreshableView.setOnScrollListener(this);
 	}
 
@@ -337,12 +337,13 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 	}
 
 	private void addIndicatorViews() {
-		Mode mode = getMode();
+		//Mode mode = getMode();
+		int modeType = getMode();
 		FrameLayout refreshableViewWrapper = getRefreshableViewWrapper();
 
-		if (mode.showHeaderLoadingLayout() && null == mIndicatorIvTop) {
+		if (showHeaderLoadingLayout() && null == mIndicatorIvTop) {
 			// If the mode can pull down, and we don't have one set already
-			mIndicatorIvTop = new IndicatorLayout(getContext(), Mode.PULL_FROM_START);
+			mIndicatorIvTop = new IndicatorLayout(getContext(), PULL_FROM_START);
 			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
 					ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 			params.rightMargin = getResources().getDimensionPixelSize(
@@ -350,15 +351,15 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 			params.gravity = Gravity.TOP | Gravity.RIGHT;
 			refreshableViewWrapper.addView(mIndicatorIvTop, params);
 
-		} else if (!mode.showHeaderLoadingLayout() && null != mIndicatorIvTop) {
+		} else if (!showHeaderLoadingLayout() && null != mIndicatorIvTop) {
 			// If we can't pull down, but have a View then remove it
 			refreshableViewWrapper.removeView(mIndicatorIvTop);
 			mIndicatorIvTop = null;
 		}
 
-		if (mode.showFooterLoadingLayout() && null == mIndicatorIvBottom) {
+		if (showFooterLoadingLayout() && null == mIndicatorIvBottom) {
 			// If the mode can pull down, and we don't have one set already
-			mIndicatorIvBottom = new IndicatorLayout(getContext(), Mode.PULL_FROM_END);
+			mIndicatorIvBottom = new IndicatorLayout(getContext(), PULL_FROM_END);
 			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
 					ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 			params.rightMargin = getResources().getDimensionPixelSize(
@@ -366,7 +367,7 @@ public abstract class PullToRefreshAdapterViewBase<T extends AbsListView> extend
 			params.gravity = Gravity.BOTTOM | Gravity.RIGHT;
 			refreshableViewWrapper.addView(mIndicatorIvBottom, params);
 
-		} else if (!mode.showFooterLoadingLayout() && null != mIndicatorIvBottom) {
+		} else if (!showFooterLoadingLayout() && null != mIndicatorIvBottom) {
 			// If we can't pull down, but have a View then remove it
 			refreshableViewWrapper.removeView(mIndicatorIvBottom);
 			mIndicatorIvBottom = null;

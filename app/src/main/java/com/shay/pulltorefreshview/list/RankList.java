@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.shay.base.PullToRefreshListView;
+import com.shay.base.utils.VolleyLog;
 import com.shay.pulltorefreshview.R;
 import com.shay.pulltorefreshview.net.Api;
 import com.shay.pulltorefreshview.net.Person;
@@ -59,6 +60,7 @@ public class RankList extends BaseListView<Person>
     @Override
     public void handleResponse(String response, @ActionType int actionType) 
     {
+        VolleyLog.d("获取的数据为：：%s",response);
         //加载假数据
         if (num<5)
         {
@@ -76,7 +78,7 @@ public class RankList extends BaseListView<Person>
     public void asyncData() 
     {
      //加载数据
-        new Api(mContext,callback).getNum();
+        new Api(mContext,callback).getEventList(String.valueOf(mPerPage),String.valueOf(page));
     }
     
     class ViewHolder

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.shay.base.PullToRefreshBase;
 import com.shay.base.PullToRefreshListView;
 import com.shay.base.extras.SoundPullEventListener;
+import com.shay.base.utils.VolleyLog;
 import com.shay.pulltorefreshview.R;
 import com.shay.pulltorefreshview.net.CallBack;
 
@@ -182,7 +183,7 @@ public abstract class BaseListView<E>
             });
 
         }
-        ptrListView.setMode(PullToRefreshBase.Mode.BOTH);
+        ptrListView.setMode(PullToRefreshBase.BOTH);
         ptrListView.setAdapter(adapter);
         ptrListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
@@ -204,7 +205,7 @@ public abstract class BaseListView<E>
         soundListener.addSoundEvent(PullToRefreshBase.REFRESHING, R.raw.refreshing_sound);
        ptrListView.setOnPullEventListener(soundListener);
         //是否显示EmptyView
-        if (ptrListView.getMode() == PullToRefreshBase.Mode.BOTH || ptrListView.getMode() == PullToRefreshBase.Mode.PULL_FROM_START) {
+        if (ptrListView.getMode() == PullToRefreshBase.BOTH || ptrListView.getMode() == PullToRefreshBase.PULL_FROM_START) {
             if (ptrListView.getRefreshableView().getHeaderViewsCount() <= 1) {
                 if (noDataView == null) {
                     noDataView = layoutInflater.inflate(R.layout.list_no_data_layout, null);
@@ -257,7 +258,9 @@ public abstract class BaseListView<E>
      */
     protected CallBack callback = new CallBack() {
         @Override
-        public void onResponse(@NonNull String response, @NonNull boolean isCache, String failureMessage) {
+        public void onResponse(@NonNull String response, @NonNull boolean isCache, String failureMessage) 
+        {
+            VolleyLog.d("获取的数据为：%s",response);
             super.onResponse(response, isCache, failureMessage);
             if (GETMORE != actionType)
                 mListItems.clear();
@@ -299,6 +302,13 @@ public abstract class BaseListView<E>
             //是否显示底部
             controlMoreFooter(isCache);
         }
+
+        @Override
+        public void onFailure(@NonNull String message) 
+        {
+            super.onFailure(message);
+            VolleyLog.d("失败的原因：%s",message);
+        }
     };
 
     private  void controlMoreFooter(boolean isCache)
@@ -325,10 +335,10 @@ public abstract class BaseListView<E>
             }
             if (headerView==null)
             ptrListView.getRefreshableView().addFooterView(view);
-            ptrListView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+            ptrListView.setMode(PullToRefreshBase.PULL_FROM_START);
             
         }else 
-            ptrListView.setMode(PullToRefreshBase.Mode.BOTH);
+            ptrListView.setMode(PullToRefreshBase.BOTH);
         
     }
 

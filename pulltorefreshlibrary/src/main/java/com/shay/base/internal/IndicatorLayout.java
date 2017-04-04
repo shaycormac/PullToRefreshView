@@ -30,8 +30,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
 
-import com.shay.base.R;
 import com.shay.base.PullToRefreshBase;
+import com.shay.base.R;
+
+import static com.shay.base.PullToRefreshBase.PULL_FROM_END;
+import static com.shay.base.PullToRefreshBase.PULL_FROM_START;
 
 
 @SuppressLint("ViewConstructor")
@@ -44,7 +47,7 @@ public class IndicatorLayout extends FrameLayout implements AnimationListener {
 
 	private final Animation mRotateAnimation, mResetRotateAnimation;
 
-	public IndicatorLayout(Context context, PullToRefreshBase.Mode mode) {
+	public IndicatorLayout(Context context, @PullToRefreshBase.Modes int mode) {
 		super(context);
 		mArrowImageView = new ImageView(context);
 

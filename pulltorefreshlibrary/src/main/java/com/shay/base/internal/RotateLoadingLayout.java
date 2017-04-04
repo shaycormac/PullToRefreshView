@@ -23,8 +23,8 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView.ScaleType;
 
-import com.shay.base.R;
 import com.shay.base.PullToRefreshBase;
+import com.shay.base.R;
 
 
 public class RotateLoadingLayout extends LoadingLayout {
@@ -38,7 +38,7 @@ public class RotateLoadingLayout extends LoadingLayout {
 
 	private final boolean mRotateDrawableWhilePulling;
 
-	public RotateLoadingLayout(Context context, PullToRefreshBase.Mode mode, @PullToRefreshBase.Orientation int scrollDirection,
+	public RotateLoadingLayout(Context context, @PullToRefreshBase.Modes int mode, @PullToRefreshBase.Orientation int scrollDirection,
 							   TypedArray attrs) {
 		super(context, mode, scrollDirection, attrs);
 

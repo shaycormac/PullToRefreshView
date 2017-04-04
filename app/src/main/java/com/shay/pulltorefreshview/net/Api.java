@@ -1,6 +1,7 @@
 package com.shay.pulltorefreshview.net;
 
 import android.content.Context;
+import android.support.v4.util.ArrayMap;
 
 /**
  * @author 作者：Shay-Patrick-Cormac
@@ -8,19 +9,25 @@ import android.content.Context;
  * @email 邮箱： 574583006@qq.com
  * @content 说明：创建这个类的目的，意义。
  */
-public class Api
+public class Api extends BaseApi
 {
-    private Context context;
-    private CallBack callBack;
-
+    
     public Api(Context context, CallBack callBack) 
     {
-        this.context = context;
-        this.callBack = callBack;
+        super(callBack,context);
+    
     }
     
     
     public void getNum() {
         callBack.onResponse("呵呵哒", false, "错i无");
+    }
+    
+    public void getEventList(String pageSize, String pageNo)
+    {
+        ArrayMap<String, String> arrayMap = new ArrayMap<>();
+        arrayMap.put("pageSize", pageSize);
+        arrayMap.put("pageNo", pageNo);
+        OkHttpInstance.getInstance().setCache(context).post(context, "/assn/indexVitality", arrayMap, asynHandler);
     }
 }

@@ -43,7 +43,7 @@ public class SoundPullEventListener<V extends View> implements
 	}
 
 	@Override
-	public final void onPullEvent(PullToRefreshBase<V> refreshView, @PullToRefreshBase.State int event, PullToRefreshBase.Mode direction) {
+	public final void onPullEvent(PullToRefreshBase<V> refreshView, @PullToRefreshBase.State int event,@PullToRefreshBase.Modes int direction) {
 		int index = mSoundMap.indexOfValue(event);
 		if (index!=-1)
 		{

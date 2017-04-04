@@ -29,7 +29,7 @@ public interface IPullToRefresh<T extends View> {
 	 * 
 	 * @return true - if the Demo has been started, false if not.
 	 */
-	public boolean demo();
+	 boolean demo();
 
 	/**
 	 * Get the mode that this view is currently in. This is only really useful when using
@@ -37,7 +37,7 @@ public interface IPullToRefresh<T extends View> {
 	 * 
 	 * @return Mode that the view is currently in
 	 */
-	public PullToRefreshBase.Mode getCurrentMode();
+	@PullToRefreshBase.Modes int getCurrentMode();
 
 	/**
 	 * Returns whether the Touch Events are filtered or not. If true is returned, then the View
@@ -47,7 +47,7 @@ public interface IPullToRefresh<T extends View> {
 	 * 
 	 * @return boolean - true if the View is filtering Touch Events
 	 */
-	public boolean getFilterTouchEvents();
+	 boolean getFilterTouchEvents();
 
 	/**
 	 * Returns a proxy object which allows you to call methods on all of the LoadingLayouts (the
@@ -56,7 +56,7 @@ public interface IPullToRefresh<T extends View> {
 	 * 
 	 * @return Object which will proxy any calls you make on it, to all of the LoadingLayouts.
 	 */
-	public ILoadingLayout getLoadingLayoutProxy();
+	 ILoadingLayout getLoadingLayoutProxy();
 
 	/**
 	 * Returns a proxy object which allows you to call methods on the LoadingLayouts (the Views
@@ -70,7 +70,7 @@ public interface IPullToRefresh<T extends View> {
 	 *            - Whether to include the End/Footer Views
 	 * @return Object which will proxy any calls you make on it, to the LoadingLayouts included.
 	 */
-	public ILoadingLayout getLoadingLayoutProxy(boolean includeStart, boolean includeEnd);
+	 ILoadingLayout getLoadingLayoutProxy(boolean includeStart, boolean includeEnd);
 
 	/**
 	 * Get the mode that this view has been set to. If this returns <code>Mode.BOTH</code>, you can
@@ -78,7 +78,8 @@ public interface IPullToRefresh<T extends View> {
 	 * 
 	 * @return Mode that the view has been set to
 	 */
-	public PullToRefreshBase.Mode getMode();
+
+	@PullToRefreshBase.Modes int getMode();
 
 	/**
 	 * Get the Wrapped Refreshable View. Anything returned here has already been added to the
@@ -101,15 +102,14 @@ public interface IPullToRefresh<T extends View> {
 	 */
 	//public PullToRefreshBase.State getState();
 
-	public @PullToRefreshBase.State
-	int getState();
+	 @PullToRefreshBase.State int getState();
 
 	/**
 	 * Whether Pull-to-Refresh is enabled
 	 * 
 	 * @return enabled
 	 */
-	public boolean isPullToRefreshEnabled();
+	 boolean isPullToRefreshEnabled();
 
 	/**
 	 * Gets whether Overscroll support is enabled. This is different to Android's standard
@@ -117,26 +117,26 @@ public interface IPullToRefresh<T extends View> {
 	 * 
 	 * @return true - if both PullToRefresh-OverScroll and Android's inbuilt OverScroll are enabled
 	 */
-	public boolean isPullToRefreshOverScrollEnabled();
+	 boolean isPullToRefreshOverScrollEnabled();
 
 	/**
 	 * Returns whether the Widget is currently in the Refreshing mState
 	 * 
 	 * @return true if the Widget is currently refreshing
 	 */
-	public boolean isRefreshing();
+	 boolean isRefreshing();
 
 	/**
 	 * Returns whether the widget has enabled scrolling on the Refreshable View while refreshing.
 	 * 
 	 * @return true if the widget has enabled scrolling while refreshing
 	 */
-	public boolean isScrollingWhileRefreshingEnabled();
+	 boolean isScrollingWhileRefreshingEnabled();
 
 	/**
 	 * Mark the current Refresh as complete. Will Reset the UI and hide the Refreshing View
 	 */
-	public void onRefreshComplete();
+	 void onRefreshComplete();
 
 	/**
 	 * Set the Touch Events to be filtered or not. If set to true, then the View will only use
@@ -148,7 +148,7 @@ public interface IPullToRefresh<T extends View> {
 	 * @param filterEvents
 	 *            - true if you want to filter Touch Events. Default is true.
 	 */
-	public void setFilterTouchEvents(boolean filterEvents);
+	 void setFilterTouchEvents(boolean filterEvents);
 
 	/**
 	 * Set the mode of Pull-to-Refresh that this view will use.
@@ -156,7 +156,8 @@ public interface IPullToRefresh<T extends View> {
 	 * @param mode
 	 *            - Mode to set the View to
 	 */
-	public void setMode(PullToRefreshBase.Mode mode);
+
+	void setMode(@PullToRefreshBase.Modes int modeType);
 
 	/**
 	 * Set OnPullEventListener for the Widget

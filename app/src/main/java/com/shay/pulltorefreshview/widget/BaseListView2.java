@@ -180,7 +180,7 @@ public abstract class BaseListView2<E>
             });
 
         }
-        ptrListView.setMode(PullToRefreshBase.Mode.BOTH);
+        ptrListView.setMode(PullToRefreshBase.BOTH);
         ptrListView.setAdapter(adapter);
         ptrListView.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
             @Override
@@ -202,7 +202,7 @@ public abstract class BaseListView2<E>
         soundListener.addSoundEvent(PullToRefreshBase.REFRESHING, R.raw.refreshing_sound);
         ptrListView.setOnPullEventListener(soundListener);
         //是否显示EmptyView
-        if (ptrListView.getMode() == PullToRefreshBase.Mode.BOTH || ptrListView.getMode() == PullToRefreshBase.Mode.PULL_FROM_START) {
+        if (ptrListView.getMode() == PullToRefreshBase.BOTH || ptrListView.getMode() == PullToRefreshBase.PULL_FROM_START) {
             if (ptrListView.getRefreshableView().getHeaderViewsCount() <= 1) {
                 if (noDataView == null) {
                     noDataView = layoutInflater.inflate(R.layout.list_no_data_layout, null);
@@ -315,10 +315,10 @@ public abstract class BaseListView2<E>
             //只有上拉更多的时候才显示没有了
            // if (actionType==GETMORE)
             ptrListView.getRefreshableView().addFooterView(view);
-            ptrListView.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+            ptrListView.setMode(PullToRefreshBase.PULL_FROM_START);
 
         }else
-            ptrListView.setMode(PullToRefreshBase.Mode.BOTH);
+            ptrListView.setMode(PullToRefreshBase.BOTH);
 
     }
 

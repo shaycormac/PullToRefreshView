@@ -36,11 +36,11 @@ public class PullToRefreshGridView extends PullToRefreshAdapterViewBase<GridView
 		super(context, attrs);
 	}
 
-	public PullToRefreshGridView(Context context, Mode mode) {
+	public PullToRefreshGridView(Context context,  @Modes int mode) {
 		super(context, mode);
 	}
 
-	public PullToRefreshGridView(Context context, Mode mode, @AnimationStyle int animaType) {
+	public PullToRefreshGridView(Context context, @Modes int mode, @AnimationStyle int animaType) {
 		super(context, mode, animaType);
 	}
 

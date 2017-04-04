@@ -19,6 +19,8 @@ import android.annotation.TargetApi;
 import android.util.Log;
 import android.view.View;
 
+import static android.R.attr.mode;
+
 
 @TargetApi(9)
 public final class OverscrollHelper {
@@ -133,11 +135,12 @@ public final class OverscrollHelper {
 		// Check that OverScroll is enabled and that we're not currently
 		// refreshing.
 		if (view.isPullToRefreshOverScrollEnabled() && !view.isRefreshing()) {
-			final PullToRefreshBase.Mode mode = view.getMode();
+		//	final PullToRefreshBase.Mode mode = view.getMode();
+			//int modeType = view.getMode();
 
 			// Check that Pull-to-Refresh is enabled, and the event isn't from
 			// touch
-			if (mode.permitsPullToRefresh() && !isTouchEvent && deltaValue != 0) {
+			if (view.permitsPullToRefresh() && !isTouchEvent && deltaValue != 0) {
 				final int newScrollValue = (deltaValue + scrollValue);
 
 				if (PullToRefreshBase.DEBUG) {
@@ -150,7 +153,7 @@ public final class OverscrollHelper {
 				if (newScrollValue < (0 - fuzzyThreshold)) {
 					// Check the mode supports the overscroll direction, and
 					// then move scroll
-					if (mode.showHeaderLoadingLayout()) {
+					if (view.showHeaderLoadingLayout()) {
 						// If we're currently at zero, we're about to start
 						// overscrolling, so change the state
 						if (currentScrollValue == 0) {
@@ -162,7 +165,7 @@ public final class OverscrollHelper {
 				} else if (newScrollValue > (scrollRange + fuzzyThreshold)) {
 					// Check the mode supports the overscroll direction, and
 					// then move scroll
-					if (mode.showFooterLoadingLayout()) {
+					if (view.showFooterLoadingLayout()) {
 						// If we're currently at zero, we're about to start
 						// overscrolling, so change the state
 						if (currentScrollValue == 0) {

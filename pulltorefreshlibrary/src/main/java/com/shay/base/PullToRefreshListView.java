@@ -50,11 +50,11 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		super(context, attrs);
 	}
 
-	public PullToRefreshListView(Context context, Mode mode) {
+	public PullToRefreshListView(Context context, @Modes int mode) {
 		super(context, mode);
 	}
 
-	public PullToRefreshListView(Context context, Mode mode,@AnimationStyle int animaType) {
+	public PullToRefreshListView(Context context, @Modes int mode,@AnimationStyle int animaType) {
 		super(context, mode, animaType);
 	}
 
@@ -191,12 +191,12 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 		LoadingLayoutProxy proxy = super.createLoadingLayoutProxy(includeStart, includeEnd);
 
 		if (mListViewExtrasEnabled) {
-			final Mode mode = getMode();
+		//	final Mode mode = getMode();
 
-			if (includeStart && mode.showHeaderLoadingLayout()) {
+			if (includeStart && showHeaderLoadingLayout()) {
 				proxy.addLayout(mHeaderLoadingView);
 			}
-			if (includeEnd && mode.showFooterLoadingLayout()) {
+			if (includeEnd && showFooterLoadingLayout()) {
 				proxy.addLayout(mFooterLoadingView);
 			}
 		}
@@ -237,13 +237,13 @@ public class PullToRefreshListView extends PullToRefreshAdapterViewBase<ListView
 
 			// Create Loading Views ready for use later
 			FrameLayout frame = new FrameLayout(getContext());
-			mHeaderLoadingView = createLoadingLayout(getContext(), Mode.PULL_FROM_START, a);
+			mHeaderLoadingView = createLoadingLayout(getContext(), PULL_FROM_START, a);
 			mHeaderLoadingView.setVisibility(GONE);
 			frame.addView(mHeaderLoadingView, lp);
 			mRefreshableView.addHeaderView(frame, null, false);
 
 			mLvFooterLoadingFrame = new FrameLayout(getContext());
-			mFooterLoadingView = createLoadingLayout(getContext(), Mode.PULL_FROM_END, a);
+			mFooterLoadingView = createLoadingLayout(getContext(), PULL_FROM_END, a);
 			mFooterLoadingView.setVisibility(GONE);
 			mLvFooterLoadingFrame.addView(mFooterLoadingView, lp);
 

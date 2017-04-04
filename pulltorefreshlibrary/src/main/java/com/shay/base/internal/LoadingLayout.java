@@ -35,9 +35,12 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.shay.base.R;
 import com.shay.base.ILoadingLayout;
 import com.shay.base.PullToRefreshBase;
+import com.shay.base.R;
+
+import static com.shay.base.PullToRefreshBase.PULL_FROM_END;
+import static com.shay.base.PullToRefreshBase.PULL_FROM_START;
 
 
 @SuppressLint("ViewConstructor")
@@ -57,7 +60,9 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 	private final TextView mHeaderText;
 	private final TextView mSubHeaderText;
 
-	protected final PullToRefreshBase.Mode mMode;
+	//protected final PullToRefreshBase.Mode mMode;
+	@PullToRefreshBase.Modes
+	protected int modeType;
 	//protected final PullToRefreshBase.Orientation mScrollDirection;
 	@PullToRefreshBase.Orientation
 	protected int direction=PullToRefreshBase.VERTICAL;
@@ -66,10 +71,10 @@ public abstract class LoadingLayout extends FrameLayout implements ILoadingLayou
 	private CharSequence mRefreshingLabel;
 	private CharSequence mReleaseLabel;
 
-	public LoadingLayout(Context context, final PullToRefreshBase.Mode mode,@PullToRefreshBase.Orientation final int direction,
+	public LoadingLayout(Context context, @PullToRefreshBase.Modes int mode, @PullToRefreshBase.Orientation final int direction,
 						 TypedArray attrs) {
 		super(context);
-		mMode = mode;
+		modeType = mode;
 		//mScrollDirection = scrollDirection;
 		this.direction = direction;
 

@@ -26,10 +26,10 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView.ScaleType;
 
-import com.shay.base.R;
 import com.shay.base.PullToRefreshBase;
+import com.shay.base.R;
 
-import static com.shay.base.PullToRefreshBase.Mode.PULL_FROM_START;
+import static com.shay.base.PullToRefreshBase.PULL_FROM_END;
 
 
 @SuppressLint("ViewConstructor")
@@ -42,10 +42,10 @@ public class FlipLoadingLayout extends LoadingLayout {
 	@PullToRefreshBase.Orientation
 	public int direction;
 
-	public FlipLoadingLayout(Context context, final PullToRefreshBase.Mode mode, @PullToRefreshBase.Orientation final int direction, TypedArray attrs) {
+	public FlipLoadingLayout(Context context, @PullToRefreshBase.Modes int mode, @PullToRefreshBase.Orientation final int direction, TypedArray attrs) {
 		super(context, mode, direction, attrs);
 
-		final int rotateAngle = mode == PULL_FROM_START ? -180 : 180;
+		final int rotateAngle = mode == PullToRefreshBase.PULL_FROM_START ? -180 : 180;
 
 		mRotateAnimation = new RotateAnimation(0, rotateAngle, Animation.RELATIVE_TO_SELF, 0.5f,
 				Animation.RELATIVE_TO_SELF, 0.5f);
@@ -125,7 +125,7 @@ public class FlipLoadingLayout extends LoadingLayout {
 
 	private float getDrawableRotationAngle() {
 		float angle = 0f;
-		switch (mMode) {
+		switch (modeType) {
 		case PULL_FROM_END:
 			if (direction == PullToRefreshBase.VERTICAL) {
 				angle = 90f;
@@ -134,7 +134,7 @@ public class FlipLoadingLayout extends LoadingLayout {
 			}
 			break;
 
-		case PULL_FROM_START:
+		case PullToRefreshBase.PULL_FROM_START:
 			if (direction == PullToRefreshBase.HORIZONTAL) {
 				angle = 270f;
 			}

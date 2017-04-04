@@ -23,6 +23,8 @@ import com.shay.base.PullToRefreshWebView;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static android.R.attr.mode;
+
 /**
  * An advanced version of {@link PullToRefreshWebView} which delegates the triggering of the
  * PullToRefresh gesture to the Javascript running within the WebView. This means that you should
@@ -68,8 +70,8 @@ public class PullToRefreshWebView2 extends PullToRefreshWebView {
 		super(context, attrs);
 	}
 
-	public PullToRefreshWebView2(Context context, Mode mode) {
-		super(context, mode);
+	public PullToRefreshWebView2(Context context, @Modes  int modeType) {
+		super(context, modeType);
 	}
 
 	private JsValueCallback mJsCallback;
